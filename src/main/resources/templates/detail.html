@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<link href='/plugins/jquery-ui/jquery-ui.min.css' rel='stylesheet' />
+<script src='/plugins/lib/jquery.js'></script>
+<script src='/plugins/jquery-ui/jquery-ui.min.js'></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#addEvent").dialog({
+		resizable : false,
+		autoOpen : true,
+		modal : true,
+		width : 550,
+		height : 650,
+		overlay : {
+			opacity : 0.5,
+			backgroudColor : 'black'
+		},
+		buttons : {
+			"关闭" : function() {
+				$(this).dialog("close");
+				window.close();
+			}
+		}
+	});
+});
+</script>
+<style>
+</style>
+<title>开发日志</title>
+</head>
+<body>
+
+	<div id="addEvent" title="日志详情">
+		<table cellpadding="6" cellspacing="6">
+			<tr>
+				<td>标题：</td>
+				<td><span th:text="${journal.title}"></span></td>
+			</tr>
+			<tr>
+				<td>项目：</td>
+				<td><span th:text="${journal.project}"></span></td>
+			</tr>
+			<tr>
+				<td>时间：</td>
+				<td><span th:text="${#dates.format(journal.startTime, 'yyyy-MM-dd')}"></span></td>
+			</tr>
+			<tr>
+				<td>类型：</td>
+				<td><span th:text="${journal.type}"></span></td>
+			</tr>
+			<tr>
+				<td>技术：</td>
+				<td><span th:text="${journal.tech}"></span></td>
+			</tr>
+			<tr>
+				<td>内容：</td>
+				<td><textarea rows="5" cols="35" readonly="readonly" th:text="${journal.content}"></textarea></td>
+			</tr>
+			<tr>
+				<td>备注：</td>
+				<td><textarea rows="5" cols="35" readonly="readonly" th:text="${journal.remarks}"></textarea></td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

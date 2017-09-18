@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<link href='/plugins/fullcalendar/fullcalendar.min.css' rel='stylesheet' />
+<link href='/plugins/jquery-ui/jquery-ui.min.css' rel='stylesheet' />
+
+<script src='/plugins/lib/moment.min.js'></script>
+<script src='/plugins/lib/jquery.js'></script>
+<script src='/plugins/fullcalendar/fullcalendar.min.js'></script>
+<script src='/plugins/fullcalendar/zh-cn.js'></script>
+<script src='/plugins/jquery-ui/jquery-ui.min.js'></script>
+
+<script th:inline="javascript">
+
+	$(document).ready(function() {
+		
+		$('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: ''
+			},
+			theme : 'jquery-ui',
+			defaultDate: [[${now}]],
+			navLinks: true, // can click day/week names to navigate views
+			editable: true,
+			eventLimit: true, // allow "more" link when too many events
+			firstDay:1, // 每行第一天为周一 
+			dayClick: function(date, allDay, jsEvent, view) {
+				var selDate = $.fullCalendar.formatDate(date, "YYYY-MM-DD");
+				$("#time").val(selDate);
+				$("#addEvent").dialog({
+					resizable : false,
+					modal : true,
+					width : 550,
+					height : 650, 
+					overlay: {
+						opacity : 0.5, 
+						backgroudColor : 'black'
+					},
+					buttons:{
+						"添加" : function(){
+							var form = $("#dialogForm"); 
+							$.ajax({  
+		                        url : form.attr('action'),  
+		                        type : form.attr('method'),  
+		                        data : form.serialize(),  
+		                        dataType : "json",  
+		                        success : function(data){  
+		                        		form[0].reset(); // 重置表单
+		                            $("#addEvent").dialog("close");  
+		                            $('#calendar').fullCalendar('refetchEvents');
+		                        },  
+		                        error : function(){  
+		                            $("#addEvent").dialog("close");  
+		                            alert("错误,请联系管理员");
+		                        }  
+		                    });
+						},
+						"取消" : function(){
+							$(this).dialog("close");
+						}
+					}
+				});
+			}, 
+			eventClick: function(calEvent, jsEvent, view) {
+				window.open(calEvent.url, '日志详情', 'width=560,height=660,resizable=no,status=no,menubar=no,scrollbars=no,location=no');
+				return false;
+		    },
+			events: '/loadEvent' // 加载数据
+		});
+	});
+</script>
+<style>
+#calendar {
+	max-width: 900px;
+	margin: 0 auto;
+}
+</style>
+<title>开发日志</title>
+</head>
+<body>
+
+	<div id='calendar'></div>
+	
+	<div id="addEvent" title="添加日志">
+		<form id="dialogForm" method="post" action="/journal/add">
+			<table cellpadding="6" cellspacing="6">  
+				<tr>  
+                    <td>标题：</td>  
+                    <td><input type="text" name="title"/></td>  
+                </tr>
+                <tr>  
+                    <td>项目：</td>  
+                    <td><input type="text" name="project"/></td>  
+                </tr>
+                <tr>  
+                    <td>时间：</td>  
+                    <td><input type="text" name="time" id="time" readonly="readonly"/></td>  
+                </tr>  
+                <tr>  
+                    <td>类型：</td>  
+                    <td>  
+                        <select name="type">
+                        		<option value="1">REALEASE</option>
+                        		<option value="2">PRODUCTION ACCIDENT</option>
+                        		<option value="0">OTHER</option>
+                        </select>  
+                    </td>  
+                </tr>  
+                <tr>  
+                    <td>技术：</td>  
+                    <td>  
+                        <select name="tech">
+                        		<option value="1">JAVA</option>
+                        		<option value="2">PYTHON</option>
+                        		<option value="3">H5</option>
+                        		<option value="4">ANDROID</option>
+                        		<option value="5">IOS</option>
+                        		<option value="0">OTHER</option>
+                        </select>  
+                    </td>  
+                </tr>
+                <tr>  
+                    <td>内容：</td>  
+                    <td>  
+                        <textarea name="content" rows="5" cols="35"></textarea>  
+                    </td>  
+                </tr>
+                <tr>  
+                    <td>备注：</td>  
+                    <td>  
+                        <textarea name="remarks" rows="5" cols="35"></textarea>
+                    </td>  
+                </tr>
+            </table>  		
+		</form>
+	</div>
+</body>
+</html>
