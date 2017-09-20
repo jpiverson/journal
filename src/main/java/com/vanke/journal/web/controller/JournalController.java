@@ -37,21 +37,21 @@ public class JournalController extends BaseController {
 		return new ResponseData(0, "hello", "success");
 	}
 
-	@RequestMapping(value = "/journal", method = RequestMethod.GET)
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String journal(Model model) {
 		String date_now = TimeUtil.toDateString(now);
 		model.addAttribute("now", date_now);
 		return "journal";
 	}
 	
-	@RequestMapping(value = "/journal/{eventId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/detail/{eventId}", method = RequestMethod.GET)
 	public String detail(Model model, @PathVariable int eventId) {
 		Journal journal = journalServcie.findOne(eventId);
 		model.addAttribute("journal", journal);
 		return "detail";
 	}
 
-	@RequestMapping(value = "/journal/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseData add(EventInput input) throws Exception {
 		Journal journal = new Journal();
@@ -73,8 +73,6 @@ public class JournalController extends BaseController {
 	@ResponseBody
 	public List<EventOuput> loadEvent(Model model, @RequestParam(value = "start", required = true) String start,
 			@RequestParam(value = "end", required = true) String end) throws Exception {
-		logger.info("start:::" + start);
-		logger.info("end:::" + end);
 		Date startTime = TimeUtil.toDate(start + " 00:00:00");
 		Date endTime = TimeUtil.toDate(end + " 00:00:00");
 		List<Journal> journals = journalServcie.findByStartTimeGreaterThanAndEndTimeLessThanOrderByStartTime(startTime,
@@ -83,10 +81,14 @@ public class JournalController extends BaseController {
 		List<EventOuput> events = new ArrayList<EventOuput>();
 		for (Journal j : journals) {
 			EventOuput e = new EventOuput(j.getId(), j.getTitle(), TimeUtil.toDateString(j.getStartTime()),
-					host + "journal/" + j.getId());
+					host + "detail/" + j.getId(),"");
+			if (j.getType() == Type.PA) {
+				e.setColor("#FFB5A1");
+			} else if (j.getType() == Type.RELEASE) {
+				e.setColor("#5FD9CD");
+			}
 			events.add(e);
 		}
-		logger.info("size:::" + events.size());
 		return events;
 	}
 

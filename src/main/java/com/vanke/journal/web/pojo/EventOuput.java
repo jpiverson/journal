@@ -6,17 +6,19 @@ public class EventOuput {
 	private String title;
 	private String start;
 	private String url;
+	private String color;
 
 	public EventOuput() {
 		super();
 	}
 
-	public EventOuput(int id, String title, String start, String url) {
+	public EventOuput(int id, String title, String start, String url, String color) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.start = start;
 		this.url = url;
+		this.color = color;
 	}
 
 	public int getId() {
@@ -50,6 +52,13 @@ public class EventOuput {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
 
 }

@@ -2,14 +2,14 @@
 <html>
 <head>
 <meta charset='utf-8' />
-<link href='/plugins/fullcalendar/fullcalendar.min.css' rel='stylesheet' />
-<link href='/plugins/jquery-ui/jquery-ui.min.css' rel='stylesheet' />
+<link href='/journal/plugins/fullcalendar/fullcalendar.min.css' rel='stylesheet' />
+<link href='/journal/plugins/jquery-ui/jquery-ui.min.css' rel='stylesheet' />
 
-<script src='/plugins/lib/moment.min.js'></script>
-<script src='/plugins/lib/jquery.js'></script>
-<script src='/plugins/fullcalendar/fullcalendar.min.js'></script>
-<script src='/plugins/fullcalendar/zh-cn.js'></script>
-<script src='/plugins/jquery-ui/jquery-ui.min.js'></script>
+<script src='/journal/plugins/lib/moment.min.js'></script>
+<script src='/journal/plugins/lib/jquery.js'></script>
+<script src='/journal/plugins/fullcalendar/fullcalendar.min.js'></script>
+<script src='/journal/plugins/fullcalendar/zh-cn.js'></script>
+<script src='/journal/plugins/jquery-ui/jquery-ui.min.js'></script>
 
 <script th:inline="javascript">
 
@@ -68,7 +68,7 @@
 				window.open(calEvent.url, '日志详情', 'width=560,height=660,resizable=no,status=no,menubar=no,scrollbars=no,location=no');
 				return false;
 		    },
-			events: '/loadEvent' // 加载数据
+			events: '/journal/loadEvent' // 加载数据
 		});
 	});
 </script>
@@ -84,7 +84,7 @@
 
 	<div id='calendar'></div>
 	
-	<div id="addEvent" title="添加日志">
+	<div id="addEvent" title="添加日志" style="display:none;">
 		<form id="dialogForm" method="post" action="/journal/add">
 			<table cellpadding="6" cellspacing="6">  
 				<tr>  
