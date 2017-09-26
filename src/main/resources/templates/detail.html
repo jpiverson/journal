@@ -29,11 +29,11 @@ $(document).ready(function() {
                         data : form.serialize(),  
                         dataType : "json",  
                         success : function(data){  
-                        	 	$( "#dialogSuccess" ).dialog();
+                        	 	window.opener.refreshCalendar();
                         	 	window.close();
                         },  
                         error : function(){
-                       	 	$( "#dialogFail" ).dialog();
+                       	 	window.opener.refreshCalendar();
                        		window.close();
                         }  
                     });
@@ -49,15 +49,13 @@ $(document).ready(function() {
 					        	 	 $.ajax({  
 				                        url : "/journal/del",  
 				                        type : "post",  
-				                        data : {
-				                        		"id" : $("#id").val()
-				                        },  
+				                        data : {"id" : $("#id").val()},  
 				                        success : function(data){  
-				                        	 	$("#dialogSuccess").dialog();
+				                        	 	window.opener.refreshCalendar();
 				                        	 	window.close();
 				                        },  
 				                        error : function(){
-				                       	 	$("#dialogFail").dialog();
+				                       	 	window.opener.refreshCalendar();
 				                       	 	window.close();
 				                        }  
 				                  });
@@ -75,6 +73,7 @@ $(document).ready(function() {
 		],
 		close: function() {
 			$(this).dialog("close");
+			window.opener.refreshCalendar();
 			window.close();
 	    }
 	});
@@ -143,12 +142,6 @@ $(document).ready(function() {
 		</form>
 	</div>
 
-	<div id="dialogSuccess" title="提示">
-		<p>恭喜,操作成功</p>
-	</div>
-	<div id="dialogFail" title="提示">
-		<p>抱歉,操作失败,请联系管理员</p>
-	</div>
 	<div id="confirm" title="提示">
 		<p>确定要删除该日志吗?</p>
 	</div>

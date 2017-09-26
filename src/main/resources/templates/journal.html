@@ -71,6 +71,10 @@
 			events: '/journal/loadEvent' // 加载数据
 		});
 	});
+	
+	function refreshCalendar() {
+		$('#calendar').fullCalendar('refetchEvents');
+	}
 </script>
 <style>
 #calendar {
