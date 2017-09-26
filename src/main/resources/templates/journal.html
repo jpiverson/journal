@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset='utf-8' />
 <link href='/journal/plugins/fullcalendar/fullcalendar.min.css' rel='stylesheet' />
@@ -14,7 +14,7 @@
 <script th:inline="javascript">
 
 	$(document).ready(function() {
-		
+		$( document ).tooltip();
 		$('#calendar').fullCalendar({
 			header: {
 				left: 'prev,next today',
@@ -84,6 +84,13 @@
 
 	<div id='calendar'></div>
 	
+	<div class="footer">
+		<a href="#" title="
+			2017-09-19 正式使用 
+			2017-09-25 增加编辑/删除功能
+		">历史发版记录</a> 
+	</div>
+	
 	<div id="addEvent" title="添加日志" style="display:none;">
 		<form id="dialogForm" method="post" action="/journal/add">
 			<table cellpadding="6" cellspacing="6">  
@@ -103,9 +110,9 @@
                     <td>类型：</td>  
                     <td>  
                         <select name="type">
-                        		<option value="1">REALEASE</option>
-                        		<option value="2">PRODUCTION ACCIDENT</option>
-                        		<option value="0">OTHER</option>
+                        		<option value="1">发布版本</option>
+                        		<option value="2">生产事故</option>
+                        		<option value="3">预计发布</option>
                         </select>  
                     </td>  
                 </tr>  
@@ -118,7 +125,6 @@
                         		<option value="3">H5</option>
                         		<option value="4">ANDROID</option>
                         		<option value="5">IOS</option>
-                        		<option value="0">OTHER</option>
                         </select>  
                     </td>  
                 </tr>

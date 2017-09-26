@@ -2,7 +2,7 @@ package com.vanke.journal.enums;
 
 public enum Type {
 
-	OTHER("其他", 0), RELEASE("发布版本", 1), PA("生产事故", 2);
+	OTHER("其他", 0), RELEASE("发布版本", 1), PA("生产事故", 2), EXPECTED_RELEASE("预计发版", 3);
 
 	private String name;
 	private int index;
@@ -17,6 +17,8 @@ public enum Type {
 			return RELEASE;
 		} else if (index == 2) {
 			return PA;
+		} else if (index == 3) {
+			return EXPECTED_RELEASE;
 		} else {
 			return OTHER;
 		}

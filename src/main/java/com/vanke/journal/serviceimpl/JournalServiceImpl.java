@@ -26,6 +26,10 @@ public class JournalServiceImpl implements JournalService {
 		return journalRepository.findOne(id);
 	}
 
+	@Override
+	public void delete(int id) {
+		journalRepository.delete(id);
+	}
 
 	@Override
 	public List<Journal> findAll() {
@@ -36,5 +40,7 @@ public class JournalServiceImpl implements JournalService {
 	public List<Journal> findByStartTimeGreaterThanAndEndTimeLessThanOrderByStartTime(Date startTime, Date endTime) {
 		return journalRepository.findByStartTimeGreaterThanAndEndTimeLessThanOrderByStartTime(startTime, endTime);
 	}
+
+	
 	
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset='utf-8' />
 <link href='/journal/plugins/jquery-ui/jquery-ui.min.css' rel='stylesheet' />
@@ -17,52 +17,138 @@ $(document).ready(function() {
 			opacity : 0.5,
 			backgroudColor : 'black'
 		},
-		buttons : {
-			"关闭" : function() {
-				$(this).dialog("close");
-				window.close();
+		buttons : [
+			{
+				text: "保存",
+				"class": "saveButtonClass",
+				click: function(){
+					var form = $("#dialogForm"); 
+					$.ajax({  
+                        url : form.attr('action'),  
+                        type : form.attr('method'),  
+                        data : form.serialize(),  
+                        dataType : "json",  
+                        success : function(data){  
+                        	 	$( "#dialogSuccess" ).dialog();
+                        },  
+                        error : function(){
+                       	 	$( "#dialogFail" ).dialog();
+                        }  
+                    });
+				}
+			},
+			{
+				text: "删除",
+				"class": "delButtonClass",
+				click: function(){
+					$("#confirm").dialog({
+						buttons: {
+					          Yes: function () {
+					        	 	 $.ajax({  
+				                        url : "/journal/del",  
+				                        type : "post",  
+				                        data : {
+				                        		"id" : $("#id").val()
+				                        },  
+				                        success : function(data){  
+				                        	 	$("#dialogSuccess").dialog();
+				                        	 	window.close();
+				                        },  
+				                        error : function(){
+				                       	 	$("#dialogFail").dialog();
+				                       	 	window.close();
+				                        }  
+				                  });
+					          },
+					          No: function () {
+					              $(this).dialog("close");
+					          }
+					      },
+					      close: function (event, ui) {
+					          $(this).remove();
+					      }
+					});
+				}
 			}
-		}
+		],
+		close: function() {
+			$(this).dialog("close");
+			window.close();
+	    }
 	});
 });
 </script>
-<style>
+<style type="text/css">
+.saveButtonClass{
+	background: #5FD9CD;
+}
+.delButtonClass{
+	background: #FFB5A1;
+}
+
 </style>
 <title>开发日志</title>
 </head>
 <body>
 
 	<div id="addEvent" title="日志详情" style="">
-		<table cellpadding="6" cellspacing="6">
-			<tr>
-				<td>标题：</td>
-				<td><span th:text="${journal.title}"></span></td>
-			</tr>
-			<tr>
-				<td>项目：</td>
-				<td><span th:text="${journal.project}"></span></td>
-			</tr>
-			<tr>
-				<td>时间：</td>
-				<td><span th:text="${#dates.format(journal.startTime, 'yyyy-MM-dd')}"></span></td>
-			</tr>
-			<tr>
-				<td>类型：</td>
-				<td><span th:text="${journal.type}"></span></td>
-			</tr>
-			<tr>
-				<td>技术：</td>
-				<td><span th:text="${journal.tech}"></span></td>
-			</tr>
-			<tr>
-				<td>内容：</td>
-				<td><textarea rows="5" cols="35" readonly="readonly" th:text="${journal.content}"></textarea></td>
-			</tr>
-			<tr>
-				<td>备注：</td>
-				<td><textarea rows="5" cols="35" readonly="readonly" th:text="${journal.remarks}"></textarea></td>
-			</tr>
-		</table>
+		<form id="dialogForm" method="post" action="/journal/add">
+			<table cellpadding="6" cellspacing="6">
+				<input type="hidden" th:value="${journal.id}" name="id" id="id"/>
+				<tr>
+					<td>标题：</td>
+					<td><input type="text" name="title" th:value="${journal.title}"/></td>
+				</tr>
+				<tr>
+					<td>项目：</td>
+					<td><input type="text" name="project" th:value="${journal.project}"/></td>
+				</tr>
+				<tr>
+					<td>时间：</td>
+					<td><input type="text" name="startTime" th:value="${#dates.format(journal.startTime, 'yyyy-MM-dd')}" readonly="readonly"/></td>
+				</tr>
+				<tr>
+					<td>类型：</td>
+					<td>
+						<select name="type">
+                        		<option th:selected="(${journal.type.name()} == 'RELEASE')" value="1">发布版本</option>
+                        		<option th:selected="(${journal.type.name()} == 'PA')" value="2">生产事故</option>
+                        		<option th:selected="(${journal.type.name()} == 'EXPECTED_RELEASE')" value="3">预计发布</option>
+                        </select>
+					</td>
+				</tr>
+				<tr>
+					<td>技术：</td>
+					<td>
+						<select name="tech">
+							<option th:selected="(${journal.tech.name()} == 'JAVA')" value="1">JAVA</option>
+	                    		<option th:selected="(${journal.tech.name()} == 'PYTHON')" value="2">PYTHON</option>
+	                    		<option th:selected="(${journal.tech.name()} == 'H5')" value="3">H5</option>
+	                    		<option th:selected="(${journal.tech.name()} == 'ANDROID')" value="4">ANDROID</option>
+	                    		<option th:selected="(${journal.tech.name()} == 'IOS')" value="5">IOS</option>
+                    		</select>
+					</td>
+				</tr>
+				<tr>
+					<td>内容：</td>
+					<td><textarea name="content" rows="5" cols="35" th:text="${journal.content}"/></td>
+				</tr>
+				<tr>
+					<td>备注：</td>
+					<td><textarea name="remarks" rows="5" cols="35" th:text="${journal.remarks}"/></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<div id="dialogSuccess" title="提示">
+		<p>恭喜,操作成功</p>
+	</div>
+	<div id="dialogFail" title="提示">
+		<p>抱歉,操作失败,请联系管理员</p>
+	</div>
+	<div id="confirm" title="提示">
+		<p>确定要删除该日志吗?</p>
 	</div>
 </body>
 </html>

@@ -2,6 +2,7 @@ package com.vanke.journal.web.pojo;
 
 public class EventInput {
 
+	private Integer id;
 	private String title;
 	private String project;
 	private String time;
@@ -9,6 +10,14 @@ public class EventInput {
 	private int tech;
 	private String content;
 	private String remarks;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getTitle() {
 		return title;

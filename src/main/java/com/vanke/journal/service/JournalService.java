@@ -10,6 +10,8 @@ public interface JournalService {
 	Journal save(Journal journal);
 	
 	Journal findOne(int id);
+	
+	void delete(int id);
 
 	List<Journal> findAll();
 
