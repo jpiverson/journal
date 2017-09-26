@@ -30,9 +30,11 @@ $(document).ready(function() {
                         dataType : "json",  
                         success : function(data){  
                         	 	$( "#dialogSuccess" ).dialog();
+                        	 	window.close();
                         },  
                         error : function(){
                        	 	$( "#dialogFail" ).dialog();
+                       		window.close();
                         }  
                     });
 				}
