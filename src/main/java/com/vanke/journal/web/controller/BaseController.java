@@ -23,7 +23,7 @@ public class BaseController {
 	protected static final String DEFAULT_PAGE = "0"; // 分页,默认第一页
 	protected static final Logger logger = Logger.getLogger(BaseController.class);
 
-	protected static final Date now = new Date(); // 当前时间
+	protected static Date now = new Date(); // 当前时间
 
 	@Value("${host}")
 	protected String host;
